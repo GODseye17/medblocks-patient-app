@@ -6,6 +6,7 @@ import { PGliteProvider } from "@electric-sql/pglite-react";
 import React, {useEffect, useState} from 'react';
 import Registration from './Pages/Registration';
 import PatientList from './Pages/PatientList';
+import PatientSearch from './Pages/PatientSearch';
 
 const App = () => {
   const [db, setDb] = useState(null);
@@ -33,12 +34,16 @@ const App = () => {
           <li>
             <a href="/patients" className="hover:underline">Patient List</a>
           </li>
+          <li>
+            <a href="/search" className="hover:underline">Search Patient</a>
+          </li>
         </ul>
       </nav>
       <Routes>
         <Route path="/" element={<div className="p-4">Welcome to Patient App</div>} />
         <Route path="/register" element={<Registration />} />
         <Route path="/patients" element={<PatientList />} />
+        <Route path="/search" element={<PatientSearch />} />
       </Routes>
     </PGliteProvider>
   );
