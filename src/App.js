@@ -4,7 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import { dbPromise, initializeDatabase } from './db';
 import { PGliteProvider } from "@electric-sql/pglite-react";
 import React, {useEffect, useState} from 'react';
-
+import Registration from './Pages/Registration';
+import PatientList from './Pages/PatientList';
 
 const App = () => {
   const [db, setDb] = useState(null);
@@ -34,6 +35,11 @@ const App = () => {
           </li>
         </ul>
       </nav>
+      <Routes>
+        <Route path="/" element={<div className="p-4">Welcome to Patient App</div>} />
+        <Route path="/register" element={<Registration />} />
+        <Route path="/patients" element={<PatientList />} />
+      </Routes>
     </PGliteProvider>
   );
 };
