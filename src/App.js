@@ -34,9 +34,9 @@ const App = () => {
           <li>
             <a href="/patients" className="hover:underline">Patient List</a>
           </li>
-          <li>
+          {/* <li>
             <a href="/search" className="hover:underline">Search Patient</a>
-          </li>
+          </li> */}
         </ul>
       </nav>
       <Routes>
