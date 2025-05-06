@@ -1,25 +1,41 @@
 import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from "react-router-dom";
+import { dbPromise, initializeDatabase } from './db';
+import { PGliteProvider } from "@electric-sql/pglite-react";
+import React, {useEffect, useState} from 'react';
 
-function App() {
+
+const App = () => {
+  const [db, setDb] = useState(null);
+
+  useEffect(() => {
+    dbPromise.then(async (database) => {
+      await initializeDatabase(database);
+      setDb(database);
+    });
+  }, []);
+
+  if (!db) {
+    return <div>Loading...</div>;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <PGliteProvider db={db}>
+      <nav className = "bg-blue-500 text-white p-4">
+        <ul>
+          <li>
+            <a href="/" className="hover:underline">Home</a>
+          </li>
+          <li>
+            <a href="/register" className="hover:underline">Register Patient</a>
+          </li>
+          <li>
+            <a href="/patients" className="hover:underline">Patient List</a>
+          </li>
+        </ul>
+      </nav>
+    </PGliteProvider>
   );
-}
+};
 
 export default App;
