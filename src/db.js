@@ -8,18 +8,25 @@ export const dbPromise = PGlite.create("idb://my-database", {
 
 export const initializeDatabase = async (db) => {
   await db.exec(`
-    CREATE TABLE IF NOT EXISTS PatientDetails (
-      PatientID TEXT PRIMARY KEY,
-      FirstName TEXT NOT NULL,
-      LastName TEXT NOT NULL,
-      Email TEXT UNIQUE NOT NULL,
-      Number TEXT,
-      Verified BOOLEAN DEFAULT false,
-      AccessToken TEXT,
-      RefreshToken TEXT,
-      Password TEXT NOT NULL
-    );
+    DO $$ 
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 
+        FROM information_schema.columns 
+        WHERE table_name = 'patientdetails' AND column_name = 'height'
+      ) THEN
+        ALTER TABLE PatientDetails
+        ADD COLUMN Height REAL,
+        ADD COLUMN BloodGroup TEXT,
+        ADD COLUMN Weight REAL,
+        ADD COLUMN MedicalCondition TEXT;
+      END IF;
+    END $$;
   `);
+
+  // Initialize other tables if needed
+  await initializeDoctorDetails(db);
+  await initializePatientRecords(db);
 };
 
 export const initializeDoctorDetails = async (db) => {

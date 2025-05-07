@@ -27,21 +27,19 @@ const DeletePatientPage = () => {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded">
-      <h2 className="text-xl font-bold mb-4">Delete Patient Record</h2>
+    <div className="card">
+      <h2 className="card-title">Delete Patient Record</h2>
       <input
         type="text"
         value={patientId}
         onChange={(e) => setPatientId(e.target.value)}
         placeholder="Enter Patient ID"
-        className="w-full p-2 border border-gray-300 rounded mb-4"
+        className="search-input"
       />
-      <button
-        onClick={handleDelete}
-        className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
-      >
+      <button onClick={handleDelete} className="button-delete">
         Delete Patient
       </button>
+
       {status && <p className="mt-4 text-sm text-gray-700">{status}</p>}
     </div>
   );
