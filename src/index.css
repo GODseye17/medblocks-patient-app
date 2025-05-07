@@ -2,9 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-color: #4f46e5;
+  --primary-color: #4037e6;
   --primary-hover: #4338ca;
-  --secondary-color: #10b981;
+  --secondary-color: #079465;
   --secondary-hover: #059669;
   --danger-color: #ef4444;
   --danger-hover: #dc2626;
@@ -35,6 +35,13 @@ body {
   background-color: var(--background-color);
   color: var(--text-primary);
   line-height: 1.5;
+  background-image: url('./assets/bg3.jpeg');
+  background-size: cover;     
+  background-position: center; 
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  min-height: 100vh; 
+  z-index: -2;
 }
 
 code {
