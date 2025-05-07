@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import './index.css'; // Make sure to import the updated index.css
+import './index.css'; 
 import { Routes, Route } from "react-router-dom";
 import { dbPromise, initializeDatabase } from './db';
 import { PGliteProvider } from "@electric-sql/pglite-react";
