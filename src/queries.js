@@ -5,3 +5,7 @@ export const insertPatientDetails = `
 export const getPatientDetailsbyName= `
   SELECT * FROM PatientDetails WHERE FirstName LIKE $1 OR LastName LIKE $1;
 `;
+
+export const deletePatient= `
+  DELETE FROM PatientDetails WHERE PatientID = $1;
+`;

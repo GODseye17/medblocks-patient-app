@@ -8,6 +8,7 @@ import React, {useEffect, useState} from 'react';
 import Registration from './Pages/Registration';
 import PatientList from './Pages/PatientList';
 import PatientSearch from './Pages/PatientSearch';
+import DeletePage from './Pages/DeletePage';
 import { Link } from "react-router-dom";
 
 const App = () => {
@@ -47,6 +48,9 @@ const App = () => {
             <li>
               <Link to="/search">Search Patient</Link>
             </li>
+            <li>
+              <Link to="/delete">Delete Patient</Link>
+            </li>
           </ul>
         </nav>
         
@@ -56,6 +60,7 @@ const App = () => {
             <Route path="/register" element={<Registration />} />
             <Route path="/patients" element={<PatientList />} />
             <Route path="/search" element={<PatientSearch />} />
+            <Route path="/delete" element={<DeletePage />} />
           </Routes>
         </div>
       </div>
