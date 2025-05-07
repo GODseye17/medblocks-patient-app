@@ -176,38 +176,41 @@ const PatientList = () => {
     <div className="card">
       <h2 className="card-title">Patient List</h2>
 
-      <div className="flex flex-wrap gap-3 items-center mb-4">
-  <select
-    value={selectedField}
-    onChange={(e) => setSelectedField(e.target.value)}
-    className="p-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-    aria-label="Select field"
-  >
-    <option value="">Select Field</option>
-    {fieldOptions.map((field) => (
-      <option key={field.value} value={field.value}>
-        {field.label}
-      </option>
-    ))}
-  </select>
-
-  <input
-    type="text"
-    placeholder="Enter value to search"
-    value={searchValue}
-    onChange={(e) => setSearchValue(e.target.value)}
-    className="p-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
-    aria-label="Search value"
-  />
-
-  <button
-    onClick={handleSearch}
-    className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition duration-200"
-    aria-label="Search"
-  >
-    Search
-  </button>
-</div>
+      <div className="search-form-group">
+      <div className="select-wrapper">
+        <select
+          value={selectedField}
+          onChange={(e) => setSelectedField(e.target.value)}
+          className="search-select"
+          aria-label="Select search field"
+        >
+          <option value="">Select Field</option>
+          {fieldOptions.map((field) => (
+            <option key={field.value} value={field.value}>
+              {field.label}
+            </option>
+          ))}
+        </select>
+      </div>
+      
+      <input
+        type="text"
+        placeholder="Enter value to search"
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        className="search-input"
+        aria-label="Search value"
+      />
+      
+      <button
+        onClick={handleSearch}
+        className="search-button"
+        aria-label="Search"
+      >
+        <span className="search-icon">⚲</span>
+        Search
+      </button>
+    </div>
 
 
       {loading ? (
