@@ -7,7 +7,7 @@ import { PGliteProvider } from "@electric-sql/pglite-react";
 import React, {useEffect, useState} from 'react';
 import Registration from './Pages/Registration';
 import PatientList from './Pages/PatientList';
-import PatientSearch from './Pages/PatientSearch';
+import QueryRecords from './Pages/QueryRecords';
 import DeletePage from './Pages/DeletePage';
 import { Link } from "react-router-dom";
 
@@ -46,7 +46,7 @@ const App = () => {
               <Link to="/patients">Patient List</Link>
             </li>
             <li>
-              <Link to="/search">Search Patient</Link>
+              <Link to="/query">Query Records</Link>
             </li>
             <li>
               <Link to="/delete">Delete Patient</Link>
@@ -59,7 +59,7 @@ const App = () => {
             <Route path="/" element={<WelcomePage />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/patients" element={<PatientList />} />
-            <Route path="/search" element={<PatientSearch />} />
+            <Route path="/query" element={<QueryRecords />} />
             <Route path="/delete" element={<DeletePage />} />
           </Routes>
         </div>
@@ -75,10 +75,10 @@ const WelcomePage = () => {
       <p className="welcome-subtitle">A comprehensive patient management system</p>
       <div className="welcome-actions">
         <Link to="/register" className="btn btn-primary" style={{ margin: '0 0.5rem' }}>Register New Patient</Link>
-        <Link to="/patients" className="btn btn-secondary" style={{ margin: '0 0.5rem' }}>View Patient List</Link>
+        <Link to="/query" className="btn btn-secondary" style={{ margin: '0 0.5rem' }}>Query Records</Link>
       </div>
     </div>
   );
 };
 
-export default App;
+export default App
