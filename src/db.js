@@ -17,7 +17,7 @@ export const initializeDatabase = async (db) => {
       Verified BOOLEAN DEFAULT false,
       AccessToken TEXT,
       RefreshToken TEXT,
-      Password TEXT NOT NULL
+      Password TEXT NOT NULL,
       Age INTEGER,
         BloodGroup TEXT,
         Height REAL,
