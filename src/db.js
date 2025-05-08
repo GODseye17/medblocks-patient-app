@@ -8,43 +8,23 @@ export const dbPromise = PGlite.create("idb://my-database", {
 
 export const initializeDatabase = async (db) => {
   await db.exec(`
-    DO $$ 
-    BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'patientdetails' AND column_name = 'age'
-      ) THEN
-        ALTER TABLE PatientDetails ADD COLUMN Age INTEGER;
-      END IF;
-
-      IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'patientdetails' AND column_name = 'bloodgroup'
-      ) THEN
-        ALTER TABLE PatientDetails ADD COLUMN BloodGroup TEXT;
-      END IF;
-
-      IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'patientdetails' AND column_name = 'height'
-      ) THEN
-        ALTER TABLE PatientDetails ADD COLUMN Height REAL;
-      END IF;
-
-      IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'patientdetails' AND column_name = 'weight'
-      ) THEN
-        ALTER TABLE PatientDetails ADD COLUMN Weight REAL;
-      END IF;
-
-      IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns 
-        WHERE table_name = 'patientdetails' AND column_name = 'medicalcondition'
-      ) THEN
-        ALTER TABLE PatientDetails ADD COLUMN MedicalCondition TEXT;
-      END IF;
-    END $$;
+     CREATE TABLE IF NOT EXISTS PatientDetails (
+      PatientID TEXT PRIMARY KEY,
+      FirstName TEXT NOT NULL,
+      LastName TEXT NOT NULL,
+      Email TEXT UNIQUE NOT NULL,
+      Number TEXT,
+      Verified BOOLEAN DEFAULT false,
+      AccessToken TEXT,
+      RefreshToken TEXT,
+      Password TEXT NOT NULL
+      Age INTEGER,
+        BloodGroup TEXT,
+        Height REAL,
+        Weight REAL,
+        MedicalCondition TEXT);
+    
+   
   `);
 
   // Initialize other tables if needed
