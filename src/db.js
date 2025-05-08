@@ -11,15 +11,38 @@ export const initializeDatabase = async (db) => {
     DO $$ 
     BEGIN
       IF NOT EXISTS (
-        SELECT 1 
-        FROM information_schema.columns 
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'patientdetails' AND column_name = 'age'
+      ) THEN
+        ALTER TABLE PatientDetails ADD COLUMN Age INTEGER;
+      END IF;
+
+      IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'patientdetails' AND column_name = 'bloodgroup'
+      ) THEN
+        ALTER TABLE PatientDetails ADD COLUMN BloodGroup TEXT;
+      END IF;
+
+      IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
         WHERE table_name = 'patientdetails' AND column_name = 'height'
       ) THEN
-        ALTER TABLE PatientDetails
-        ADD COLUMN Height REAL,
-        ADD COLUMN BloodGroup TEXT,
-        ADD COLUMN Weight REAL,
-        ADD COLUMN MedicalCondition TEXT;
+        ALTER TABLE PatientDetails ADD COLUMN Height REAL;
+      END IF;
+
+      IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'patientdetails' AND column_name = 'weight'
+      ) THEN
+        ALTER TABLE PatientDetails ADD COLUMN Weight REAL;
+      END IF;
+
+      IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'patientdetails' AND column_name = 'medicalcondition'
+      ) THEN
+        ALTER TABLE PatientDetails ADD COLUMN MedicalCondition TEXT;
       END IF;
     END $$;
   `);

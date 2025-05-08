@@ -3,15 +3,35 @@ import { dbPromise } from "../db";
 import { insertPatientDetails } from "../queries";
 
 const Registration = () => {
-  const [formData, setFormData] = useState({
-    PatientID: "",
-    FirstName: "",
-    LastName: "",
-    Email: "",
-    Number: "",
-    Password: "",
-  });
-  
+  const formFields = [
+    { name: "PatientID", label: "Patient ID", type: "text" },
+    { name: "FirstName", label: "First Name", type: "text" },
+    { name: "LastName", label: "Last Name", type: "text" },
+    { name: "Email", label: "Email Address", type: "email" },
+    { name: "Number", label: "Phone Number", type: "tel" },
+    { name: "Age", label: "Age", type: "number" },
+    { name: "BloodGroup", label: "Blood Group", type: "select", options: [
+      { value: "A+", label: "A+" },
+      { value: "A-", label: "A-" },
+      { value: "B+", label: "B+" },
+      { value: "B-", label: "B-" },
+      { value: "AB+", label: "AB+" },
+      { value: "AB-", label: "AB-" },
+      { value: "O+", label: "O+" },
+      { value: "O-", label: "O-" },
+    ]},
+    { name: "Height", label: "Height (cm)", type: "number" },
+    { name: "Weight", label: "Weight (kg)", type: "number" },
+    { name: "MedicalCondition", label: "Medical Condition", type: "textarea" },
+    { name: "Password", label: "Password", type: "password" },
+  ];
+
+  const initialFormData = formFields.reduce((acc, field) => {
+    acc[field.name] = "";
+    return acc;
+  }, {});
+
+  const [formData, setFormData] = useState(initialFormData);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,43 +46,70 @@ const Registration = () => {
     setErrorMessage("");
     
     const db = await dbPromise;
-    const { PatientID, FirstName, LastName, Email, Number, Password } = formData;
     
     try {
       await db.query(insertPatientDetails, [
-        PatientID,
-        FirstName,
-        LastName,
-        Email,
-        Number,
-        Password,
+        formData.PatientID,
+        formData.FirstName,
+        formData.LastName,
+        formData.Email,
+        formData.Number,
+        parseInt(formData.Age),
+        formData.BloodGroup,
+        parseFloat(formData.Height),
+        parseFloat(formData.Weight),
+        formData.MedicalCondition,
+        formData.Password,
       ]);
 
       setSuccessMessage("Patient registered successfully!");
-
-      // Clear the form data
-      setFormData({
-        PatientID: "",
-        FirstName: "",
-        LastName: "",
-        Email: "",
-        Number: "",
-        Password: "",
-      });
+      setFormData(initialFormData);
     } catch (error) {
       console.error("Error inserting patient details:", error);
       setErrorMessage("Failed to register patient. Please try again.");
     }
   };
-  
-  const formFields = [
-    { name: "PatientID", label: "Patient ID", type: "text" },
-    { name: "FirstName", label: "First Name", type: "text" },
-    { name: "LastName", label: "Last Name", type: "text" },
-    { name: "Email", label: "Email Address", type: "email" },
-    { name: "Number", label: "Phone Number", type: "tel" },
-    { name: "Password", label: "Password", type: "password" },
-  ];
+
+  const renderField = (field) => {
+    const commonProps = {
+      name: field.name,
+      value: formData[field.name],
+      onChange: handleChange,
+      className: "form-control",
+      required: true,
+      id: field.name,
+    };
+
+    if (field.type === "select") {
+      return (
+        <select {...commonProps}>
+          <option value="">Select {field.label}</option>
+          {field.options.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      );
+    }
+
+    if (field.type === "textarea") {
+      return (
+        <textarea 
+          {...commonProps}
+          rows="3"
+          required={false}
+        />
+      );
+    }
+
+    return (
+      <input
+        type={field.type}
+        {...commonProps}
+      />
+    );
+  };
 
   return (
     <div className="form-container">
@@ -86,15 +133,7 @@ const Registration = () => {
             <label className="form-label" htmlFor={field.name}>
               {field.label}
             </label>
-            <input
-              id={field.name}
-              type={field.type}
-              name={field.name}
-              value={formData[field.name]}
-              onChange={handleChange}
-              className="form-control"
-              required
-            />
+            {renderField(field)}
           </div>
         ))}
         

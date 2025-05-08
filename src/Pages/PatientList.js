@@ -7,6 +7,11 @@ const fieldOptions = [
   { label: "Last Name", value: "lastname" },
   { label: "Email", value: "email" },
   { label: "Phone Number", value: "number" },
+  { label: "Age", value: "age" },
+  { label: "Blood Group", value: "bloodgroup" },
+  { label: "Height", value: "height" },
+  { label: "Weight", value: "weight" },
+  { label: "Medical Condition", value: "medicalcondition" }
 ];
 
 const PatientList = () => {
@@ -61,41 +66,40 @@ const PatientList = () => {
       <h2 className="card-title">Patient List</h2>
 
       <div className="search-form-group">
-      <div className="select-wrapper">
-        <select
-          value={selectedField}
-          onChange={(e) => setSelectedField(e.target.value)}
-          className="search-select"
-          aria-label="Select search field"
+        <div className="select-wrapper">
+          <select
+            value={selectedField}
+            onChange={(e) => setSelectedField(e.target.value)}
+            className="search-select"
+            aria-label="Select search field"
+          >
+            <option value="">Select Field</option>
+            {fieldOptions.map((field) => (
+              <option key={field.value} value={field.value}>
+                {field.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      
+        <input
+          type="text"
+          placeholder="Enter value to search"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          className="search-input"
+          aria-label="Search value"
+        />
+      
+        <button
+          onClick={handleSearch}
+          className="search-button"
+          aria-label="Search"
         >
-          <option value="">Select Field</option>
-          {fieldOptions.map((field) => (
-            <option key={field.value} value={field.value}>
-              {field.label}
-            </option>
-          ))}
-        </select>
+          <span className="search-icon">⚲</span>
+          Search
+        </button>
       </div>
-      
-      <input
-        type="text"
-        placeholder="Enter value to search"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-        className="search-input"
-        aria-label="Search value"
-      />
-      
-      <button
-        onClick={handleSearch}
-        className="search-button"
-        aria-label="Search"
-      >
-        <span className="search-icon">⚲</span>
-        Search
-      </button>
-    </div>
-
 
       {loading ? (
         <p>Loading patients...</p>
@@ -113,6 +117,11 @@ const PatientList = () => {
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
+                <th>Age</th>
+                <th>Blood Group</th>
+                <th>Height (cm)</th>
+                <th>Weight (kg)</th>
+                <th>Medical Condition</th>
               </tr>
             </thead>
             <tbody>
@@ -123,6 +132,11 @@ const PatientList = () => {
                   <td>{patient.lastname}</td>
                   <td>{patient.email}</td>
                   <td>{patient.number}</td>
+                  <td>{patient.age}</td>
+                  <td>{patient.bloodgroup}</td>
+                  <td>{patient.height}</td>
+                  <td>{patient.weight}</td>
+                  <td>{patient.medicalcondition}</td>
                 </tr>
               ))}
             </tbody>
