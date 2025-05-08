@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { dbPromise } from "../db";
+import { setupTabSync } from "../tabSync";
 
 const fieldOptions = [
   { label: "Patient ID", value: "patientid" },
@@ -38,7 +39,16 @@ const PatientList = () => {
       }
     };
     fetchPatients();
+    const cleanup = setupTabSync({
+        onPatientAdded: () => fetchPatients(),
+        onPatientDeleted: () => fetchPatients(),
+        onPatientUpdated: () => fetchPatients(),
+      });
+  
+      return cleanup;
   }, []);
+
+  
 
   const handleSearch = () => {
     if (!selectedField || searchValue.trim() === "") {

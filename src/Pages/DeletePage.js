@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { dbPromise } from "../db";
 import { deletePatient } from "../queries";
+import { broadcastPatientUpdate } from "../tabSync";
 
 const DeletePatientPage = () => {
   const [patientId, setPatientId] = useState("");
@@ -17,6 +18,10 @@ const DeletePatientPage = () => {
     try {
       const db = await dbPromise;
       await db.query(deletePatient, [patientId]);
+      
+      
+      broadcastPatientUpdate('PATIENT_DELETED', { patientId });
+      
       setStatus(`Patient with ID "${patientId}" deleted successfully.`);
       setStatusType("success");
       setPatientId("");

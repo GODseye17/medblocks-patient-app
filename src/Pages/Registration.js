@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { dbPromise } from "../db";
 import { insertPatientDetails } from "../queries";
+import { broadcastPatientUpdate } from "../tabSync";
 
 const Registration = () => {
   const formFields = [
@@ -61,6 +62,9 @@ const Registration = () => {
         formData.MedicalCondition,
         formData.Password,
       ]);
+
+      
+      broadcastPatientUpdate('PATIENT_ADDED', formData);
 
       setSuccessMessage("Patient registered successfully!");
       setFormData(initialFormData);
