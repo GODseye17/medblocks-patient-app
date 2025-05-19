@@ -63,8 +63,20 @@ const Registration = () => {
         formData.Password,
       ]);
 
+      const patientData = {
+        patientid: formData.PatientID,
+        firstname: formData.FirstName,
+        lastname: formData.LastName,
+        email: formData.Email,
+        number: formData.Number,
+        age: parseInt(formData.Age),
+        bloodgroup: formData.BloodGroup,
+        height: parseFloat(formData.Height),
+        weight: parseFloat(formData.Weight),
+        medicalcondition: formData.MedicalCondition
+      };
       
-      broadcastPatientUpdate('PATIENT_ADDED', formData);
+      broadcastPatientUpdate('PATIENT_ADDED', patientData);
 
       setSuccessMessage("Patient registered successfully!");
       setFormData(initialFormData);

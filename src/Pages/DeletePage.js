@@ -22,29 +22,16 @@ const DeletePatientPage = () => {
       
       console.log(`[DeletePage] Delete operation result:`, result);
       
-      // Check if the deletion was successful (affected rows > 0)
       if (result && result.rowCount > 0) {
         console.log(`[DeletePage] Patient ${patientId} deleted successfully`);
         
-        // Broadcast the update with more detailed data
-        const deleteData = { 
-          patientId: patientId,
-          timestamp: new Date().getTime(),
-          success: true
-        };
-        
-        console.log(`[DeletePage] Broadcasting patient delete:`, deleteData);
-        broadcastPatientUpdate('PATIENT_DELETED', deleteData);
+        broadcastPatientUpdate('PATIENT_DELETED', {
+          patientid: patientId
+        });
         
         setStatus(`Patient with ID "${patientId}" deleted successfully.`);
         setStatusType("success");
         setPatientId("");
-        
-        // As a backup, directly trigger a refresh after a short delay
-        setTimeout(() => {
-          console.log(`[DeletePage] Triggering direct refresh as backup`);
-          window.triggerPageRefreshAllTabs('/patients');
-        }, 300);
       } else {
         console.log(`[DeletePage] No patient found with ID: ${patientId}`);
         setStatus(`No patient found with ID "${patientId}".`);

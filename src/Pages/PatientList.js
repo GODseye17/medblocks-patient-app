@@ -23,32 +23,47 @@ const PatientList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        setLoading(true);
-        const db = await dbPromise;
-        const results = await db.query("SELECT * FROM PatientDetails");
-        setPatients(results.rows);
-        setFilteredPatients(results.rows);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching patient details:", error);
-        setError("Failed to load patient data. Please try again later.");
-        setLoading(false);
-      }
-    };
-    fetchPatients();
-    const cleanup = setupTabSync({
-        onPatientAdded: () => fetchPatients(),
-        onPatientDeleted: () => fetchPatients(),
-        onPatientUpdated: () => fetchPatients(),
-      });
-  
-      return cleanup;
-  }, []);
+  const fetchPatients = async () => {
+    try {
+      setLoading(true);
+      const db = await dbPromise;
+      const results = await db.query("SELECT * FROM PatientDetails");
+      setPatients(results.rows);
+      setFilteredPatients(results.rows);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching patient details:", error);
+      setError("Failed to load patient data. Please try again later.");
+      setLoading(false);
+    }
+  };
 
-  
+  useEffect(() => {
+    fetchPatients();
+    
+    const cleanup = setupTabSync({
+      onPatientAdded: (newPatient) => {
+        setPatients(prevPatients => {
+          const updatedPatients = [...prevPatients, newPatient];
+          setFilteredPatients(updatedPatients);
+          return updatedPatients;
+        });
+      },
+      onPatientDeleted: (deletedData) => {
+        console.log('Handling patient deletion:', deletedData);
+        setPatients(prevPatients => {
+          const updatedPatients = prevPatients.filter(
+            patient => patient.patientid !== deletedData.patientid
+          );
+          setFilteredPatients(updatedPatients);
+          return updatedPatients;
+        });
+      },
+      onPatientUpdated: () => fetchPatients()
+    });
+
+    return cleanup;
+  }, []);
 
   const handleSearch = () => {
     if (!selectedField || searchValue.trim() === "") {
@@ -136,7 +151,7 @@ const PatientList = () => {
             </thead>
             <tbody>
               {filteredPatients.map((patient) => (
-                <tr key={patient.patientid || `${patient.firstname}-${patient.lastname}`}>
+                <tr key={patient.patientid}>
                   <td>{patient.patientid}</td>
                   <td>{patient.firstname}</td>
                   <td>{patient.lastname}</td>
