@@ -25,6 +25,9 @@ export const broadcastPatientUpdate = (type, data) => {
     case 'PATIENT_ADDED':
       console.log('[tabSync] Patient added - refreshing patient list');
       triggerPageRefreshAllTabs('/patients');
+      triggerPageRefreshAllTabs('/patients');
+      triggerPageRefreshAllTabs('/patients');
+      triggerPageRefreshAllTabs('/patients');
       break;
     case 'PATIENT_DELETED':
       console.log(`[tabSync] Patient deleted (ID: ${patientId}) - refreshing patient list`);
