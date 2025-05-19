@@ -7,31 +7,56 @@ const DeletePatientPage = () => {
   const [patientId, setPatientId] = useState("");
   const [status, setStatus] = useState("");
   const [statusType, setStatusType] = useState("");
-
+  
   const handleDelete = async () => {
     if (!patientId.trim()) {
       setStatus("Please enter a valid Patient ID.");
       setStatusType("error");
       return;
     }
-
+    
     try {
+      console.log(`[DeletePage] Attempting to delete patient with ID: ${patientId}`);
       const db = await dbPromise;
-      await db.query(deletePatient, [patientId]);
+      const result = await db.query(deletePatient, [patientId]);
       
+      console.log(`[DeletePage] Delete operation result:`, result);
       
-      broadcastPatientUpdate('PATIENT_DELETED', { patientId });
-      
-      setStatus(`Patient with ID "${patientId}" deleted successfully.`);
-      setStatusType("success");
-      setPatientId("");
+      // Check if the deletion was successful (affected rows > 0)
+      if (result && result.rowCount > 0) {
+        console.log(`[DeletePage] Patient ${patientId} deleted successfully`);
+        
+        // Broadcast the update with more detailed data
+        const deleteData = { 
+          patientId: patientId,
+          timestamp: new Date().getTime(),
+          success: true
+        };
+        
+        console.log(`[DeletePage] Broadcasting patient delete:`, deleteData);
+        broadcastPatientUpdate('PATIENT_DELETED', deleteData);
+        
+        setStatus(`Patient with ID "${patientId}" deleted successfully.`);
+        setStatusType("success");
+        setPatientId("");
+        
+        // As a backup, directly trigger a refresh after a short delay
+        setTimeout(() => {
+          console.log(`[DeletePage] Triggering direct refresh as backup`);
+          window.triggerPageRefreshAllTabs('/patients');
+        }, 300);
+      } else {
+        console.log(`[DeletePage] No patient found with ID: ${patientId}`);
+        setStatus(`No patient found with ID "${patientId}".`);
+        setStatusType("error");
+      }
     } catch (error) {
-      console.error("Error deleting patient:", error);
+      console.error("[DeletePage] Error deleting patient:", error);
       setStatus("An error occurred while deleting the patient.");
       setStatusType("error");
     }
   };
-
+  
   return (
     <div className="card">
       <h2 className="card-title">Delete Patient Record</h2>
