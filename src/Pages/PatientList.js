@@ -42,18 +42,17 @@ const PatientList = () => {
     fetchPatients();
     
     const cleanup = setupTabSync({
-      onPatientAdded: (newPatient) => {
+      onPatientAdded: async (newPatient) => {
         setPatients(prevPatients => {
           const updatedPatients = [...prevPatients, newPatient];
           setFilteredPatients(updatedPatients);
           return updatedPatients;
         });
       },
-      onPatientDeleted: (deletedData) => {
-        console.log('Handling patient deletion:', deletedData);
+      onPatientDeleted: async (deletedData) => {
         setPatients(prevPatients => {
           const updatedPatients = prevPatients.filter(
-            patient => patient.patientid !== deletedData.patientid
+            patient => patient.patientid !== deletedData.patientId
           );
           setFilteredPatients(updatedPatients);
           return updatedPatients;
@@ -151,7 +150,7 @@ const PatientList = () => {
             </thead>
             <tbody>
               {filteredPatients.map((patient) => (
-                <tr key={patient.patientid}>
+                <tr key={patient.patientid || `${patient.firstname}-${patient.lastname}`}>
                   <td>{patient.patientid}</td>
                   <td>{patient.firstname}</td>
                   <td>{patient.lastname}</td>

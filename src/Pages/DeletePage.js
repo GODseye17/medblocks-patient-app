@@ -25,9 +25,14 @@ const DeletePatientPage = () => {
       if (result && result.rowCount > 0) {
         console.log(`[DeletePage] Patient ${patientId} deleted successfully`);
         
-        broadcastPatientUpdate('PATIENT_DELETED', {
-          patientid: patientId
-        });
+        const deleteData = { 
+          patientId: patientId,
+          timestamp: new Date().getTime(),
+          success: true
+        };
+        
+        console.log(`[DeletePage] Broadcasting patient delete:`, deleteData);
+        broadcastPatientUpdate('PATIENT_DELETED', deleteData);
         
         setStatus(`Patient with ID "${patientId}" deleted successfully.`);
         setStatusType("success");

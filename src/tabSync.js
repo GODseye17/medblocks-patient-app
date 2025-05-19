@@ -1,3 +1,4 @@
+// src/tabSync.js
 let patientChannel;
 
 const getChannel = () => {
